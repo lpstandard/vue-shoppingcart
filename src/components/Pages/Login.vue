@@ -34,7 +34,7 @@ export default {
       const api = `${process.env.VUE_APP_APIPATH}/admin/signin`;
       const vm = this;
       this.$http.post(api, vm.user).then(response => {
-        console.log("API", response.data);
+        // console.log("LOGIN_API", response.data);
         if (response.data.success) {
           vm.$router.push("/");
         }
