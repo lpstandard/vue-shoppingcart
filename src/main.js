@@ -9,7 +9,7 @@ import 'bootstrap'
 
 Vue.config.productionTip = false
 Vue.use(VueAxios, axios)
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true
 
 /* eslint-disable no-new */
 new Vue({
@@ -21,7 +21,7 @@ new Vue({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
-    // console.log('need verify')
+    console.log('need verify')
     const api = `${process.env.VUE_APP_APIPATH}/api/user/check`;
     axios.post(api).then(response => {
       if (response.data.success) {

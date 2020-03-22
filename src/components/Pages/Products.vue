@@ -160,7 +160,8 @@ export default {
   data() {
     return {
       products: [],
-      tempProduct: {}
+      tempProduct: {},
+      isNew: false
     };
   },
   methods: {
@@ -179,16 +180,28 @@ export default {
         vm.products = response.data.products;
       });
     },
-    openModal() {
+    openModal(isNew, item) {
+      if (isNew) {
+        this.tempProduct = {};
+        this.isNew = true;
+      } else {
+        this.tempProduct = Object.assign({}, item);
+        this.isNew = false;
+      }
       $("#productModal").modal("show");
     },
     updateProduct() {
       const api = `${process.env.VUE_APP_APIPATH}/api/${
         process.env.VUE_APP_CUSTOMPATH
       }/admin/product`;
+      // console.log(
+      //   "A PATH",
+      //   process.env.VUE_APP_APIPATH,
+      //   process.env.VUE_APP_CUSTOMPATH
+      // );
       const vm = this;
       this.$http.post(api, { data: vm.tempProduct }).then(response => {
-        console.log("A API", response.data);
+        console.log("Message after update", response.data);
         if (response.data.success) {
           $("#productModal").modal("hide");
           vm.getProducts();
@@ -205,3 +218,4 @@ export default {
   }
 };
 </script>
+
