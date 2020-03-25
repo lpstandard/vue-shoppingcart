@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="text-right">
-            <button class="btn btn-primary mt-4" @click="openModal">Create New Products</button>
+            <button class="btn btn-primary mt-4" @click="openModal(true)">Create New Products</button>
         </div>
         <table class="table mt-4">
             <thead>
@@ -12,6 +12,7 @@
                     <th width="120">Sale Price</th>
                     <th width="100">Enabled</th>
                     <th width="80">Edit</th>
+                    <th width="120">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +26,10 @@
                         <span v-else>Disable</span>
                     </td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm">Edit</button>
+                        <button class="btn btn-outline-primary btn-sm" @click="openModal(false, item)">Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-danger  btn-sm" @click="deleteModal(item)">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -142,9 +146,10 @@
       <div class="modal-body">
         是否刪除 <strong class="text-danger">{{ tempProduct.title }}</strong> 商品(刪除後將無法恢復)。
       </div>
+   
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-danger"
+        <button type="button" class="btn btn-danger" @click="deleteProducts(item)"
           >確認刪除</button>
       </div>
     </div>
@@ -190,17 +195,27 @@ export default {
       }
       $("#productModal").modal("show");
     },
+    deleteModal(item) {
+      $("#delProductModal").modal("show");
+    },
     updateProduct() {
-      const api = `${process.env.VUE_APP_APIPATH}/api/${
+      let api = `${process.env.VUE_APP_APIPATH}/api/${
         process.env.VUE_APP_CUSTOMPATH
       }/admin/product`;
+      let httpMethod = "post";
       // console.log(
       //   "A PATH",
       //   process.env.VUE_APP_APIPATH,
       //   process.env.VUE_APP_CUSTOMPATH
       // );
       const vm = this;
-      this.$http.post(api, { data: vm.tempProduct }).then(response => {
+      if (!vm.isNew) {
+        api = `${process.env.VUE_APP_APIPATH}/api/${
+          process.env.VUE_APP_CUSTOMPATH
+        }/admin/product/${vm.tempProduct.id}`;
+        httpMethod = "put";
+      }
+      this.$http[httpMethod](api, { data: vm.tempProduct }).then(response => {
         console.log("Message after update", response.data);
         if (response.data.success) {
           $("#productModal").modal("hide");
@@ -210,6 +225,26 @@ export default {
           vm.getProducts();
           console.log("Update fail");
         }
+      });
+    },
+    deleteProducts() {
+      const vm = this;
+      let api = `${process.env.VUE_APP_APIPATH}/api/${
+        process.env.VUE_APP_CUSTOMPATH
+      }/admin/product/${vm.tempProduct.id}`;
+      let httpMethod = "delete";
+
+      this.$http[httpMethod](api, { data: vm.tempProduct }).then(response => {
+        console.log("Message after delete", response.data);
+        console.log("vm.tempProduct", vm.tempProduct.id);
+        // if (response.data.success) {
+        //   $("#delProductModal").modal("hide");
+        //   vm.getProducts();
+        // } else {
+        //   $("#delProductModal").modal("hide");
+        //   vm.getProducts();
+        //   console.log("Delete fail");
+        // }
       });
     }
   },
