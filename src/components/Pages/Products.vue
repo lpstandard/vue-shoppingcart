@@ -146,10 +146,9 @@
       <div class="modal-body">
         是否刪除 <strong class="text-danger">{{ tempProduct.title }}</strong> 商品(刪除後將無法恢復)。
       </div>
-   
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-danger" @click="deleteProducts(item)"
+        <button type="button" class="btn btn-danger" @click="deleteProducts"
           >確認刪除</button>
       </div>
     </div>
@@ -196,18 +195,16 @@ export default {
       $("#productModal").modal("show");
     },
     deleteModal(item) {
+      this.tempProduct = item;
       $("#delProductModal").modal("show");
     },
     updateProduct() {
       let api = `${process.env.VUE_APP_APIPATH}/api/${
         process.env.VUE_APP_CUSTOMPATH
       }/admin/product`;
+
       let httpMethod = "post";
-      // console.log(
-      //   "A PATH",
-      //   process.env.VUE_APP_APIPATH,
-      //   process.env.VUE_APP_CUSTOMPATH
-      // );
+
       const vm = this;
       if (!vm.isNew) {
         api = `${process.env.VUE_APP_APIPATH}/api/${
@@ -234,17 +231,17 @@ export default {
       }/admin/product/${vm.tempProduct.id}`;
       let httpMethod = "delete";
 
-      this.$http[httpMethod](api, { data: vm.tempProduct }).then(response => {
+      this.$http[httpMethod](api).then(response => {
         console.log("Message after delete", response.data);
-        console.log("vm.tempProduct", vm.tempProduct.id);
-        // if (response.data.success) {
-        //   $("#delProductModal").modal("hide");
-        //   vm.getProducts();
-        // } else {
-        //   $("#delProductModal").modal("hide");
-        //   vm.getProducts();
-        //   console.log("Delete fail");
-        // }
+        console.log("vm.tempProduct", vm.tempProduct);
+        if (response.data.success) {
+          $("#delProductModal").modal("hide");
+          vm.getProducts();
+        } else {
+          $("#delProductModal").modal("hide");
+          vm.getProducts();
+          console.log("Delete fail");
+        }
       });
     }
   },
