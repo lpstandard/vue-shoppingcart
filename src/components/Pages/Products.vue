@@ -60,10 +60,11 @@
                 <i class="fas fa-spinner fa-spin"></i>
               </label>
               <input type="file" id="customFile" class="form-control"
-                ref="files">
+                ref="files" @change="uploadFile">
             </div>
-            <img img="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=828346ed697837ce808cae68d3ddc3cf&auto=format&fit=crop&w=1350&q=80"
-              class="img-fluid" alt="">
+            <!-- <img img="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=828346ed697837ce808cae68d3ddc3cf&auto=format&fit=crop&w=1350&q=80"
+              class="img-fluid" alt=""> -->
+              <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
           </div>
           <div class="col-sm-8">
             <div class="form-group">
@@ -243,6 +244,31 @@ export default {
           console.log("Delete fail");
         }
       });
+    },
+    uploadFile() {
+      console.log("This is upload file", this);
+      const uploadedFile = this.$refs.files.files[0];
+      const vm = this;
+      const formData = new FormData();
+      formData.append("file-to-upload", uploadedFile);
+      const url = `${process.env.VUE_APP_APIPATH}/api/${
+        process.env.VUE_APP_CUSTOMPATH
+      }/admin/upload`;
+      this.$http
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.success) {
+            // vm.tempProduct.imageUrl = response.data.imageUrl;
+            vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
+            // $("#delProductModal").modal("hide");
+            // vm.getProducts();
+          }
+        });
     }
   },
   created() {
