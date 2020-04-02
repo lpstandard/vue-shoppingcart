@@ -1,5 +1,8 @@
 <template>
     <div>
+    <div>
+        <loading :active.sync="isLoading"></loading>
+    </div>
         <div class="text-right">
             <button class="btn btn-primary mt-4" @click="openModal(true)">Create New Products</button>
         </div>
@@ -57,7 +60,7 @@
             </div>
             <div class="form-group">
               <label for="customFile">或 上傳圖片
-                <i class="fas fa-spinner fa-spin"></i>
+                <i class="fas fa-spinner" v-if="status.fileUploading"></i>
               </label>
               <input type="file" id="customFile" class="form-control"
                 ref="files" @change="uploadFile">
@@ -166,7 +169,11 @@ export default {
     return {
       products: [],
       tempProduct: {},
-      isNew: false
+      isNew: false,
+      isLoading: false,
+      status: {
+        fileUploading: false
+      }
     };
   },
   methods: {
@@ -180,8 +187,10 @@ export default {
       //     process.env.VUE_APP_APIPATH,
       //     process.env.VUE_APP_CUSTOMPATH
       //   );
+      vm.isLoading = true;
       this.$http.get(api).then(response => {
         console.log("A API", response.data);
+        vm.isLoading = false;
         vm.products = response.data.products;
       });
     },
@@ -254,6 +263,7 @@ export default {
       const url = `${process.env.VUE_APP_APIPATH}/api/${
         process.env.VUE_APP_CUSTOMPATH
       }/admin/upload`;
+      vm.status.fileUploading = true;
       this.$http
         .post(url, formData, {
           headers: {
@@ -262,11 +272,14 @@ export default {
         })
         .then(response => {
           console.log(response.data);
+          vm.status.fileUploading = false;
           if (response.data.success) {
             // vm.tempProduct.imageUrl = response.data.imageUrl;
             vm.$set(vm.tempProduct, "imageUrl", response.data.imageUrl);
             // $("#delProductModal").modal("hide");
             // vm.getProducts();
+          } else {
+            this.$bus.$emit("message:push", response.data.message, "danger");
           }
         });
     }
