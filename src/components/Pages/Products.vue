@@ -37,6 +37,24 @@
                 </tr>
             </tbody>
         </table>
+<!-- Pagination -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item" :class="{'disabled': !pagination.has_pre}">
+              <a class="page-link" href="#" aria-label="Previous" @click.prevent="getProducts(pagination.current_page - 1)">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item" v-for="page in pagination.total_pages" :key="page" :class="{'active': pagination.current_page === page}"><a class="page-link" href="#" @click.prevent="getProducts(page)">{{page}}</a></li>
+            <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next" @click.prevent="getProducts(pagination.current_page + 1)">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+            </li>
+          </ul>
+        </nav>
 <!-- Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -171,16 +189,17 @@ export default {
       tempProduct: {},
       isNew: false,
       isLoading: false,
+      pagination: {},
       status: {
         fileUploading: false
       }
     };
   },
   methods: {
-    getProducts() {
+    getProducts(page = 1) {
       const api = `${process.env.VUE_APP_APIPATH}/api/${
         process.env.VUE_APP_CUSTOMPATH
-      }/products`;
+      }/products?page=${page}`;
       const vm = this;
       //   console.log(
       //     "A PATH",
@@ -192,6 +211,7 @@ export default {
         console.log("A API", response.data);
         vm.isLoading = false;
         vm.products = response.data.products;
+        vm.pagination = response.data.pagination;
       });
     },
     openModal(isNew, item) {
@@ -279,7 +299,7 @@ export default {
             // $("#delProductModal").modal("hide");
             // vm.getProducts();
           } else {
-            this.$bus.$emit("message:push", response.data.message, "danger");
+            this.$bus.$emit("message:push", "something", "danger");
           }
         });
     }

@@ -17,12 +17,14 @@
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import Alert from "./AlertMessage";
+import Pagination from "./Pagination";
 
 export default {
   components: {
     Sidebar,
     Navbar,
-    Alert
+    Alert,
+    Pagination
   }
 };
 </script>
