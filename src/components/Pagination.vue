@@ -25,9 +25,34 @@
 export default {
   name: "Pagination",
   data() {
-    return {};
+    return {
+      products: [],
+      tempProduct: {},
+      isNew: false,
+      isLoading: false,
+      pagination: {}
+    };
   },
-  methods: {},
+  methods: {
+    getProducts(page = 1) {
+      const api = `${process.env.VUE_APP_APIPATH}/api/${
+        process.env.VUE_APP_CUSTOMPATH
+      }/products?page=${page}`;
+      const vm = this;
+      //   console.log(
+      //     "A PATH",
+      //     process.env.VUE_APP_APIPATH,
+      //     process.env.VUE_APP_CUSTOMPATH
+      //   );
+      vm.isLoading = true;
+      this.$http.get(api).then(response => {
+        console.log("A API", response.data);
+        vm.isLoading = false;
+        vm.products = response.data.products;
+        vm.pagination = response.data.pagination;
+      });
+    }
+  },
   created() {}
 };
 </script>

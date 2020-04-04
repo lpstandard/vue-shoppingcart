@@ -38,7 +38,7 @@
             </tbody>
         </table>
 <!-- Pagination -->
-        <nav aria-label="Page navigation example">
+        <!-- <nav aria-label="Page navigation example">
           <ul class="pagination">
             <li class="page-item" :class="{'disabled': !pagination.has_pre}">
               <a class="page-link" href="#" aria-label="Previous" @click.prevent="getProducts(pagination.current_page - 1)">
@@ -54,7 +54,7 @@
             </a>
             </li>
           </ul>
-        </nav>
+        </nav> -->
 <!-- Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalLabel" aria-hidden="true">

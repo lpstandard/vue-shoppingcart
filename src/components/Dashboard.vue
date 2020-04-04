@@ -10,6 +10,7 @@
         </main>
       </div>
     </div>
+    <pagination />
 </div>
 </template>
 
