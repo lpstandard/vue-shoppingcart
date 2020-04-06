@@ -9,8 +9,8 @@
         <router-view></router-view>
         </main>
       </div>
+    <Pagination/>
     </div>
-    <pagination />
 </div>
 </template>
 
