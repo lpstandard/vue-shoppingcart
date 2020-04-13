@@ -6,6 +6,7 @@ import VueAxios from 'vue-axios'
 import App from './App'
 import router from './router'
 // import '../../../../Library/Caches/typescript/2.9/node_modules/@types/bootstrap'
+import '../node_modules/bootstrap'
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import './bus';
