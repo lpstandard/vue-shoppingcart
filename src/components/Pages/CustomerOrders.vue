@@ -20,7 +20,8 @@
             </div>
           </div>
           <div class="card-footer d-flex">
-            <button type="button" class="btn btn-outline-secondary btn-sm">
+            <button type="button" class="btn btn-outline-secondary btn-sm"
+            @click="getProduct(item.id)">
               <i class="fas fa-spinner fa-spin"></i>
               查看更多
             </button>
@@ -37,10 +38,13 @@
 </template>
 
 <script>
+import $ from "jquery";
+
 export default {
   data() {
     return {
       products: [],
+      product: {},
       isLoading: false
     };
   },
@@ -60,9 +64,24 @@ export default {
         vm.isLoading = false;
       });
     },
-    created() {
-      this.getProducts();
+    getProduct(id) {
+      const vm = this;
+      const url = `${process.env.VUE_APP_APIPATH}/api/${
+        process.env.VUE_APP_CUSTOMPATH
+      }/product/${id}`;
+      console.log("URL", url);
+      vm.isLoading = true;
+      this.$http.get(url).then(response => {
+        // vm.product = response.data.product;
+        console.log("getProduct", response);
+        // vm.getProducts();
+        // vm.pagination = response.data.pagination;
+        vm.isLoading = false;
+      });
     }
+  },
+  created() {
+    this.getProducts();
   }
 };
 </script>c
