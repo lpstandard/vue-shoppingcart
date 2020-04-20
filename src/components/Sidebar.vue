@@ -16,6 +16,10 @@
                 <i class="fas fa-box-open"></i>
                 產品列表
                 </router-link>
+                <router-link class="nav-link" to="/admin/products">
+                <i class="fas fa-box-open"></i>
+                折價券
+                </router-link>
                 </a>
               </li>
             </ul>
