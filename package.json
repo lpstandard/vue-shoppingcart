@@ -18,7 +18,7 @@
     "mem": "^6.0.1",
     "node-sass": "^4.13.1",
     "popper.js": "^1.16.1",
-    "serialize-javascript": "^3.0.0",
+    "serialize-javascript": "^3.1.0",
     "vee-validate": "^3.2.5",
     "vue": "^2.5.2",
     "vue-axios": "^2.1.5",
